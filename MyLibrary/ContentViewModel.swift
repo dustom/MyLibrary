@@ -6,3 +6,42 @@
 //
 
 import Foundation
+
+@MainActor
+class ContentViewModel: ObservableObject {
+    
+    enum FetchStatus {
+        case notStarted
+        case fetching
+        case success
+        case failed(error: Error)
+    }
+    
+    private let fetcher = FetchBooks()
+    @Published var books: BookSearch
+    @Published var status: FetchStatus = .notStarted
+    
+    init() {
+        let decoder = JSONDecoder()
+        let data = try! Data(contentsOf: Bundle.main.url(forResource: "search", withExtension: "json")!)
+        books = try! decoder.decode(BookSearch.self, from: data)
+    }
+    
+    func coverURL(for bookCode: Double) -> URL{
+        let id = Int(bookCode)
+        let url = URL(string: "https://covers.openlibrary.org/b/id/" + String(id) + ".jpg")!
+        print(url)
+        return url
+    }
+    
+    func getBooks(for search: String) async {
+        status = .fetching
+        
+        do {
+            books = try await fetcher.fetchBooks(for: search)
+            status = .success
+        } catch {
+            status = .failed(error: error)
+        }
+    }
+}

@@ -8,17 +8,19 @@
 import Foundation
 
 struct BookSearch: Codable {
-    let docs: [Document]
+    let docs: [Book]
     
-    struct Document: Codable {
-        let authorKey: String
-        let authorName: String
-        let firstPublishYear: Int
+    struct Book: Codable, Hashable {
+        let authorKey: [String]?
+        let authorName: [String]?
+        let cover: Double?
+        let firstPublishYear: Double?
         let title: String
         
         enum CodingKeys: String, CodingKey {
             case authorKey = "author_key"
             case authorName = "author_name"
+            case cover = "cover_i"
             case firstPublishYear = "first_publish_year"
             case title
         }
