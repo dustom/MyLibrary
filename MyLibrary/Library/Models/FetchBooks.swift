@@ -19,7 +19,7 @@ class FetchBooks {
         
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
         components.queryItems = [
-            URLQueryItem(name: "title", value: search)
+            URLQueryItem(name: "q", value: search)
         ]
         
         guard let fetchURL = components.url else {

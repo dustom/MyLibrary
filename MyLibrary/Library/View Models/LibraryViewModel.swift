@@ -8,7 +8,7 @@
 import Foundation
 
 @MainActor
-class ContentViewModel: ObservableObject {
+class LibraryViewModel: ObservableObject {
     
     enum FetchStatus {
         case notStarted
@@ -29,8 +29,7 @@ class ContentViewModel: ObservableObject {
     
     func coverURL(for bookCode: Double) -> URL{
         let id = Int(bookCode)
-        let url = URL(string: "https://covers.openlibrary.org/b/id/" + String(id) + ".jpg")!
-        print(url)
+        let url = URL(string: "https://covers.openlibrary.org/b/id/" + String(id) + "-M.jpg")!
         return url
     }
     
