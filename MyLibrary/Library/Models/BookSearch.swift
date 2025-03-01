@@ -7,22 +7,32 @@
 
 import Foundation
 
+import Foundation
+
 struct BookSearch: Codable {
-    let docs: [Book]
-    
-    struct Book: Codable, Hashable {
-        let authorKey: [String]?
-        let authorName: [String]?
-        let cover: Double?
-        let firstPublishYear: Double?
-        let title: String
-        
-        enum CodingKeys: String, CodingKey {
-            case authorKey = "author_key"
-            case authorName = "author_name"
-            case cover = "cover_i"
-            case firstPublishYear = "first_publish_year"
-            case title
-        }
-    }
+    let items: [Item]
+}
+
+struct Item: Codable, Hashable {
+    let volumeInfo: VolumeInfo
+}
+
+struct VolumeInfo: Codable, Hashable {
+    let title: String
+    let authors: [String]?
+    let publisher: String?
+    let publishedDate: String?
+    let description: String?
+    let industryIdentifiers: [IndustryIdentifier]?
+    let pageCount: Int?
+    let imageLinks: ImageLinks?
+}
+
+struct IndustryIdentifier: Codable, Hashable {
+    let type: String
+    let identifier: String
+}
+
+struct ImageLinks: Codable, Hashable {
+    let thumbnail: String
 }

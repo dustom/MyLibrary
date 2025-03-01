@@ -12,39 +12,22 @@ struct SearchView: View {
     @StateObject private var viewModel = LibraryViewModel()
     @State var searchText: String = ""
     @State private var typingLocation: Bool = false
-    @State private var searchResult: [BookSearch.Book] = []
+    @State private var searchResult: [Book] = []
     
     var barcode: String?
     
     var body: some View {
         NavigationStack {
             Group {
-                List {
-                    if searchResult != [] {
-                        ForEach (searchResult, id:\.self) { book in
-                            HStack {
-                                AsyncImage(url: viewModel.coverURL(for: book.cover ?? 0)) { image in
-                                    image
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 120, height: 120)
-                                } placeholder: {
-                                    if book.cover != nil {
-                                        ProgressView()
-                                    } else {
-                                        Image(systemName: "questionmark.circle.dashed")
-                                            .font(.title)
-                                            .frame(width: 120, height: 120)
-                                    }
-                                    
-                                }
-                                Text(book.title)
-                                    .font(.headline)
-                                Spacer()
-                                Text(book.authorName?.first! ?? "No author")
-                            }
-                        }
-                    }
+                switch viewModel.status {
+                case .notStarted:
+                    ContentUnavailableView("Search Books", systemImage: "magnifyingglass", description: Text("Search books by title, author or ISBN."))
+                case .fetching:
+                    ProgressView()
+                case .success:
+                    mainView
+                case .failed:
+                    ContentUnavailableView("No Books Found", systemImage: "exclamationmark.magnifyingglass", description: Text("There are no books matching your search. Try a different search."))
                 }
             }
             .toolbar{
@@ -55,24 +38,33 @@ struct SearchView: View {
                 }
             }
         }
-       
+        
         .searchable(text: $searchText, isPresented: $typingLocation, prompt: "Search Books" )
         .onSubmit(of: .search) {
             //set typing location to false to go back to the default state of the view without the searchbar selected
             typingLocation = false
             Task{
-                await viewModel.getBooks(for: searchText)
-                searchResult = viewModel.books.docs
+                await viewModel.getBooksForSearch(search: searchText)
+                searchResult = viewModel.books
                 searchText = ""
             }
         }
         .onAppear{
             if let barcode = barcode {
-                print(barcode)
                 Task{
-                    await viewModel.getBooks(for: barcode)
-                    searchResult = viewModel.books.docs
+                    await viewModel.getBooksForBarCode(barcode: barcode)
+                    searchResult = viewModel.books
                     searchText = ""
+                }
+            }
+        }
+    }
+    
+    private var mainView: some View {
+        List {
+            ForEach (searchResult, id:\.self) { book in
+                NavigationLink(destination: BookDetailView(book: book)) {
+                    BookNavigationLinkView(book: book)
                 }
             }
         }

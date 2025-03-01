@@ -13,14 +13,15 @@ class FetchBooks {
     }
     
     
-    func fetchBooks(for search: String) async throws -> BookSearch  {
+    func fetchBooks(for search: String, barcode: Bool) async throws -> BookSearch  {
         
-        let baseURL = URL(string: "https://openlibrary.org/search.json?")!
+        let baseURL = URL(string: "https://www.googleapis.com/books/v1/volumes?")!
         
         var components = URLComponents(url: baseURL, resolvingAgainstBaseURL: false)!
         components.queryItems = [
-            URLQueryItem(name: "q", value: search)
+            URLQueryItem(name: "q", value: barcode ? "isbn:\(search)" : search)
         ]
+
         
         guard let fetchURL = components.url else {
             throw FetchError.invalidURL
