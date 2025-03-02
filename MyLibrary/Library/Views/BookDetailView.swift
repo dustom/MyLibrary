@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct BookDetailView: View {
+    @Environment(\.dismiss) private var dismiss
     var book: Book
+    var isEditable: Bool?
+    @State private var bookPlacement: BookPlacement = .toBeRead
     @State private var isFormViewPresented = false
 
     var body: some View {
@@ -22,8 +25,9 @@ struct BookDetailView: View {
                                 image
                                     .resizable()
                                     .scaledToFit()
+                                    .clipShape(RoundedRectangle(cornerRadius: 5))
                                     .frame(maxWidth: 200, maxHeight: 200)
-                                    .cornerRadius(8)
+                                   
                             } else if phase.error != nil {
                                 Image(systemName: "questionmark")
                                     .bold()
@@ -48,6 +52,17 @@ struct BookDetailView: View {
                             .font(.title2)
                             .foregroundColor(.secondary)
                             .frame(maxWidth: .infinity, alignment: .center)
+                    }
+                    
+                    if let editable = isEditable {
+                        if editable {
+                            Picker("Shelf", selection: $bookPlacement) {
+                                ForEach(BookPlacement.allCases) { placement in
+                                    Text(placement.rawValue)
+                                    }
+                                }
+                            .pickerStyle(.segmented)
+                        }
                     }
                     
                     Divider()
@@ -92,14 +107,39 @@ struct BookDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar{
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Add"){
-                        isFormViewPresented = true
+                    if let editable = isEditable {
+                        if editable {
+                            Button("Edit"){
+                                isFormViewPresented = true
+                            }
+                        }
+                    } else {
+                        Button("Add"){
+                            isFormViewPresented = true
+                        }
+                    }
+                }
+                ToolbarItem(placement: .topBarLeading) {
+                    if let editable = isEditable {
+                        if editable {
+                            Button("Close") {
+                                dismiss()
+                            }
+                        }
                     }
                 }
             }
             .fullScreenCover(isPresented: $isFormViewPresented) {
-                BookFormView(book: book)
+                BookFormView(book: book, isEditable: isEditable)
             }
+        }
+        .onAppear(){
+            if let placement = book.placement {
+                bookPlacement = placement
+            }
+        }
+        .onChange(of: bookPlacement) {
+            book.placement = bookPlacement
         }
     }
 
@@ -138,9 +178,10 @@ struct BookDetailView_Previews: PreviewProvider {
             description: "A classic fantasy novel about Bilbo Baggins and his adventure to reclaim the Lonely Mountain.",
             publisher: "Houghton Mifflin Harcourt",
             publishedDate: Date(),
-            categories: ["Fantasy", "Adventure"]
+            categories: ["Fantasy", "Adventure"],
+            placement: .reading
         )
 
-        BookDetailView(book: sampleBook)
+        BookDetailView(book: sampleBook, isEditable: true)
     }
 }

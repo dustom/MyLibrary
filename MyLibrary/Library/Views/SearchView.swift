@@ -50,11 +50,13 @@ struct SearchView: View {
             }
         }
         .onAppear{
-            if let barcode = barcode {
-                Task{
-                    await viewModel.getBooksForBarCode(barcode: barcode)
-                    searchResult = viewModel.books
-                    searchText = ""
+            if let barcode = barcode{
+                if barcode != ""{
+                    Task{
+                        await viewModel.getBooksForBarCode(barcode: barcode)
+                        searchResult = viewModel.books
+                        searchText = ""
+                    }
                 }
             }
         }

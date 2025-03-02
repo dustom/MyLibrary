@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class Book: Equatable, Hashable, Identifiable {
+final class Book: Codable, Equatable, Hashable, Identifiable, ObservableObject {
     #Unique<Book>([\.title, \.author])
     
     var title: String
@@ -36,10 +36,53 @@ final class Book: Equatable, Hashable, Identifiable {
         self.placement = placement
     }
     
+    enum CodingKeys: String, CodingKey {
+            case title
+            case author
+            case pages
+            case coverImageURL
+            case isbn
+            case bookDescription = "description"
+            case publisher
+            case publishedDate
+            case categories
+            case placement
+        }
+    
+    func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encode(title, forKey: .title)
+            try container.encodeIfPresent(author, forKey: .author)
+            try container.encodeIfPresent(pages, forKey: .pages)
+            try container.encodeIfPresent(coverImageURL, forKey: .coverImageURL)
+            try container.encodeIfPresent(isbn, forKey: .isbn)
+            try container.encodeIfPresent(bookDescription, forKey: .bookDescription)
+            try container.encodeIfPresent(publisher, forKey: .publisher)
+            try container.encodeIfPresent(publishedDate, forKey: .publishedDate)
+            try container.encodeIfPresent(categories, forKey: .categories)
+            try container.encodeIfPresent(placement, forKey: .placement)
+        }
+        
+        // Implement init(from:) for decoding
+        required init(from decoder: Decoder) throws {
+            let container = try decoder.container(keyedBy: CodingKeys.self)
+            title = try container.decode(String.self, forKey: .title)
+            author = try container.decodeIfPresent([String].self, forKey: .author)
+            pages = try container.decodeIfPresent(Int.self, forKey: .pages)
+            coverImageURL = try container.decodeIfPresent(URL.self, forKey: .coverImageURL)
+            isbn = try container.decodeIfPresent(String.self, forKey: .isbn)
+            bookDescription = try container.decodeIfPresent(String.self, forKey: .bookDescription)
+            publisher = try container.decodeIfPresent(String.self, forKey: .publisher)
+            publishedDate = try container.decodeIfPresent(Date.self, forKey: .publishedDate)
+            categories = try container.decodeIfPresent([String].self, forKey: .categories)
+            placement = try container.decodeIfPresent(BookPlacement.self, forKey: .placement)
+        }
+    
 }
 
-enum BookPlacement: String, Codable {
-    case toBeRead = "To Be Read"
+enum BookPlacement: String, CaseIterable, Codable, Identifiable {
     case reading = "Reading"
+    case toBeRead = "To Be Read"
     case read = "Read"
+    var id: Self { self }
 }
