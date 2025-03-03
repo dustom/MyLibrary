@@ -13,7 +13,7 @@ struct BookTile: View, Transferable, Codable, Hashable {
         CodableRepresentation(contentType: .bookTile)
     }
     
-    let book: Book
+    var book: Book
     var body: some View {
         
         VStack{
@@ -69,7 +69,8 @@ struct BookTile: View, Transferable, Codable, Hashable {
         description: "A classic fantasy novel about Bilbo Baggins and his adventure to reclaim the Lonely Mountain.",
         publisher: "Houghton Mifflin Harcourt",
         publishedDate: Date(),
-        categories: ["Fantasy", "Adventure"]
+        categories: ["Fantasy", "Adventure"],
+        lastChange: Date()
     )
     BookTile(book: sampleBook)
 }

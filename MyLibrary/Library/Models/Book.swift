@@ -22,8 +22,9 @@ final class Book: Codable, Equatable, Hashable, Identifiable, ObservableObject {
     var publishedDate: Date?
     var categories: [String]?
     var placement: BookPlacement?
+    var lastChange: Date
     
-    init(title: String, author: [String]? = nil, pages: Int? = nil, coverImageURL: URL? = nil, isbn: String? = nil, description: String? = nil, publisher: String? = nil, publishedDate: Date? = nil, categories: [String]? = nil, placement: BookPlacement? = nil) {
+    init(title: String, author: [String]? = nil, pages: Int? = nil, coverImageURL: URL? = nil, isbn: String? = nil, description: String? = nil, publisher: String? = nil, publishedDate: Date? = nil, categories: [String]? = nil, placement: BookPlacement? = nil, lastChange: Date) {
         self.title = title
         self.author = author
         self.pages = pages
@@ -34,49 +35,53 @@ final class Book: Codable, Equatable, Hashable, Identifiable, ObservableObject {
         self.publishedDate = publishedDate
         self.categories = categories
         self.placement = placement
+        self.lastChange = lastChange
     }
     
     enum CodingKeys: String, CodingKey {
-            case title
-            case author
-            case pages
-            case coverImageURL
-            case isbn
-            case bookDescription = "description"
-            case publisher
-            case publishedDate
-            case categories
-            case placement
-        }
+        case title
+        case author
+        case pages
+        case coverImageURL
+        case isbn
+        case bookDescription = "description"
+        case publisher
+        case publishedDate
+        case categories
+        case placement
+        case lastChange = "change"
+    }
     
     func encode(to encoder: Encoder) throws {
-            var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(title, forKey: .title)
-            try container.encodeIfPresent(author, forKey: .author)
-            try container.encodeIfPresent(pages, forKey: .pages)
-            try container.encodeIfPresent(coverImageURL, forKey: .coverImageURL)
-            try container.encodeIfPresent(isbn, forKey: .isbn)
-            try container.encodeIfPresent(bookDescription, forKey: .bookDescription)
-            try container.encodeIfPresent(publisher, forKey: .publisher)
-            try container.encodeIfPresent(publishedDate, forKey: .publishedDate)
-            try container.encodeIfPresent(categories, forKey: .categories)
-            try container.encodeIfPresent(placement, forKey: .placement)
-        }
-        
-        // Implement init(from:) for decoding
-        required init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            title = try container.decode(String.self, forKey: .title)
-            author = try container.decodeIfPresent([String].self, forKey: .author)
-            pages = try container.decodeIfPresent(Int.self, forKey: .pages)
-            coverImageURL = try container.decodeIfPresent(URL.self, forKey: .coverImageURL)
-            isbn = try container.decodeIfPresent(String.self, forKey: .isbn)
-            bookDescription = try container.decodeIfPresent(String.self, forKey: .bookDescription)
-            publisher = try container.decodeIfPresent(String.self, forKey: .publisher)
-            publishedDate = try container.decodeIfPresent(Date.self, forKey: .publishedDate)
-            categories = try container.decodeIfPresent([String].self, forKey: .categories)
-            placement = try container.decodeIfPresent(BookPlacement.self, forKey: .placement)
-        }
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(title, forKey: .title)
+        try container.encodeIfPresent(author, forKey: .author)
+        try container.encodeIfPresent(pages, forKey: .pages)
+        try container.encodeIfPresent(coverImageURL, forKey: .coverImageURL)
+        try container.encodeIfPresent(isbn, forKey: .isbn)
+        try container.encodeIfPresent(bookDescription, forKey: .bookDescription)
+        try container.encodeIfPresent(publisher, forKey: .publisher)
+        try container.encodeIfPresent(publishedDate, forKey: .publishedDate)
+        try container.encodeIfPresent(categories, forKey: .categories)
+        try container.encodeIfPresent(placement, forKey: .placement)
+        try container.encode(lastChange, forKey: .lastChange)
+    }
+    
+    // Implement init(from:) for decoding
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        title = try container.decode(String.self, forKey: .title)
+        author = try container.decodeIfPresent([String].self, forKey: .author)
+        pages = try container.decodeIfPresent(Int.self, forKey: .pages)
+        coverImageURL = try container.decodeIfPresent(URL.self, forKey: .coverImageURL)
+        isbn = try container.decodeIfPresent(String.self, forKey: .isbn)
+        bookDescription = try container.decodeIfPresent(String.self, forKey: .bookDescription)
+        publisher = try container.decodeIfPresent(String.self, forKey: .publisher)
+        publishedDate = try container.decodeIfPresent(Date.self, forKey: .publishedDate)
+        categories = try container.decodeIfPresent([String].self, forKey: .categories)
+        placement = try container.decodeIfPresent(BookPlacement.self, forKey: .placement)
+        lastChange = try container.decode(Date.self, forKey: .lastChange)
+    }
     
 }
 
