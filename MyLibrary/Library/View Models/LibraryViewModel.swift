@@ -40,7 +40,8 @@ class LibraryViewModel: ObservableObject {
                 isbn: item.volumeInfo.industryIdentifiers?.first?.identifier,
                 description: item.volumeInfo.description,
                 publisher: item.volumeInfo.publisher,
-                publishedDate: DateFormatter().date(from: item.volumeInfo.publishedDate ?? ""))
+                publishedDate: DateFormatter().date(from: item.volumeInfo.publishedDate ?? ""),
+                lastChange: Date())
             self.books.append(convertedBook)
         }
         print(books)

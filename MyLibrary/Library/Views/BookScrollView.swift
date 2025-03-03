@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct BookScrollView: View {
     
-    @State var bookPlacement: BookPlacement
+    var bookPlacement: BookPlacement
     @State var library: [Book]
     @State var bookToPresent: Book?
     @State private var isBookDetailPresented = false
@@ -34,21 +35,20 @@ struct BookScrollView: View {
             
             ScrollView(.horizontal, showsIndicators: false){
                 HStack{
-                    ForEach(library.filter { $0.placement == bookPlacement }) { book in
-                        HStack{
-                            Button {
-                                bookToPresent = book
-                            } label: {
-                                HStack{
-                                    BookTile(book: book)
-                                        .buttonStyle(.plain)
-                                        .padding(.vertical, 12)
-                                        .padding(.horizontal, 5)
-                                        .draggable(BookTile(book: book))
-                                }
-                            }
-                            .buttonStyle(PlainButtonStyle())
+                    let sortedLibrary = library.sorted { $0.lastChange > $1.lastChange }
+                    let filteredLibrary = sortedLibrary.filter { $0.placement == bookPlacement}
+                    ForEach(filteredLibrary) { book in
+                        Button {
+                            bookToPresent = book
+                        } label: {
+                            BookTile(book: book)
+                                .buttonStyle(.plain)
+                                .padding(.vertical, 12)
+                                .padding(.horizontal, 5)
+                                .draggable(BookTile(book: book))
+                            
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                     
                 }
@@ -64,7 +64,7 @@ struct BookScrollView: View {
 }
 
 #Preview {
-    let placement: BookPlacement = .reading
+    
     let library: [Book] = [Book(
         title: "The Hobbit",
         author: ["J.R.R. Tolkien"],
@@ -75,7 +75,8 @@ struct BookScrollView: View {
         publisher: "Houghton Mifflin Harcourt",
         publishedDate: Date(),
         categories: ["Fantasy", "Adventure"],
-        placement: .reading
+        placement: .reading,
+        lastChange: Date()
     ), Book(
         title: "The Hobbit",
         author: ["J.R.R. Tolkien"],
@@ -86,19 +87,24 @@ struct BookScrollView: View {
         publisher: "Houghton Mifflin Harcourt",
         publishedDate: Date(),
         categories: ["Fantasy", "Adventure"],
-        placement: .reading
+        placement: .reading,
+        lastChange: Date()
     ),
-        Book(
-        title: "The Hobbit",
-        author: ["J.R.R. Tolkien"],
-        pages: 310,
-        coverImageURL: URL(string: "https://books.google.com/books/content?id=CixXEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"),
-        isbn: "9780547928227",
-        description: "A classic fantasy novel about Bilbo Baggins and his adventure to reclaim the Lonely Mountain.",
-        publisher: "Houghton Mifflin Harcourt",
-        publishedDate: Date(),
-        categories: ["Fantasy", "Adventure"],
-        placement: .reading
-    )]
+                           Book(
+                            title: "The Hobbit",
+                            author: ["J.R.R. Tolkien"],
+                            pages: 310,
+                            coverImageURL: URL(string: "https://books.google.com/books/content?id=CixXEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"),
+                            isbn: "9780547928227",
+                            description: "A classic fantasy novel about Bilbo Baggins and his adventure to reclaim the Lonely Mountain.",
+                            publisher: "Houghton Mifflin Harcourt",
+                            publishedDate: Date(),
+                            categories: ["Fantasy", "Adventure"],
+                            placement: .reading,
+                            lastChange: Date()
+                           )]
+    
+    let placement: BookPlacement = .reading
+    
     BookScrollView(bookPlacement: placement, library: library)
 }

@@ -38,7 +38,8 @@ struct ShowAllBookPlacementView: View {
         publisher: "Houghton Mifflin Harcourt",
         publishedDate: Date(),
         categories: ["Fantasy", "Adventure"],
-        placement: .reading
+        placement: .reading,
+        lastChange: Date()
     ), Book(
         title: "The Hobbit",
         author: ["J.R.R. Tolkien"],
@@ -49,7 +50,8 @@ struct ShowAllBookPlacementView: View {
         publisher: "Houghton Mifflin Harcourt",
         publishedDate: Date(),
         categories: ["Fantasy", "Adventure"],
-        placement: .reading
+        placement: .reading,
+        lastChange: Date()
     ),
         Book(
         title: "The Hobbit",
@@ -61,7 +63,8 @@ struct ShowAllBookPlacementView: View {
         publisher: "Houghton Mifflin Harcourt",
         publishedDate: Date(),
         categories: ["Fantasy", "Adventure"],
-        placement: .reading
+        placement: .reading,
+        lastChange: Date()
     )]
     
     ShowAllBookPlacementView(placement: .reading, library: library)

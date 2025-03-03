@@ -49,5 +49,6 @@ struct BookNavigationLinkView: View {
 }
 
 #Preview {
-    BookNavigationLinkView(book: Book(title: "Inheritance and an unrueasonably long title to test if it wraps as it should or not. Lorem Ipsum is simply dummy text of the printing and typesetting industry.", author: ["Christopher Paolini, Christopher Paolini, Christopher Paolini, Christopher Paolini,"], coverImageURL: URL(string: "https://books.google.com/books/content?id=qxsdAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api")))
+    BookNavigationLinkView(book: Book(title: "Inheritance and an unrueasonably long title to test if it wraps as it should or not. Lorem Ipsum is simply dummy text of the printing and typesetting industry.", author: ["Christopher Paolini, Christopher Paolini, Christopher Paolini, Christopher Paolini,"], coverImageURL: URL(string: "https://books.google.com/books/content?id=qxsdAgAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"),
+                                      lastChange: Date()))
 }

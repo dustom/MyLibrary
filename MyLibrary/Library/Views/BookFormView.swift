@@ -132,7 +132,7 @@ struct BookFormView: View {
         book?.publisher = publisher
         book?.publishedDate = publishedDate
         book?.categories = [categories]
-        saveContext()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+        saveContext()
     }
         
 
@@ -151,7 +151,8 @@ struct BookFormView: View {
             publisher: publisher.isEmpty ? nil : publisher,
             publishedDate: publishedDate,
             categories: categoryList.isEmpty ? nil : categoryList,
-            placement: category
+            placement: category,
+            lastChange: Date()
         )
         modelContext.insert(newBook)
         saveContext()

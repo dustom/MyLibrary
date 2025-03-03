@@ -179,7 +179,8 @@ struct BookDetailView_Previews: PreviewProvider {
             publisher: "Houghton Mifflin Harcourt",
             publishedDate: Date(),
             categories: ["Fantasy", "Adventure"],
-            placement: .reading
+            placement: .reading,
+            lastChange: Date()
         )
 
         BookDetailView(book: sampleBook, isEditable: true)
