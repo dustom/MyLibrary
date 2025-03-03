@@ -63,6 +63,46 @@ struct BookScrollView: View {
 }
 
 #Preview {
+    
+    let library: [Book] = [Book(
+        title: "The Hobbit",
+        author: ["J.R.R. Tolkien"],
+        pages: 310,
+        coverImageURL: URL(string: "https://books.google.com/books/content?id=CixXEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"),
+        isbn: "9780547928227",
+        description: "A classic fantasy novel about Bilbo Baggins and his adventure to reclaim the Lonely Mountain.",
+        publisher: "Houghton Mifflin Harcourt",
+        publishedDate: Date(),
+        categories: ["Fantasy", "Adventure"],
+        placement: .reading,
+        lastChange: Date()
+    ), Book(
+        title: "The Hobbit",
+        author: ["J.R.R. Tolkien"],
+        pages: 310,
+        coverImageURL: URL(string: "https://books.google.com/books/content?id=CixXEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"),
+        isbn: "9780547928227",
+        description: "A classic fantasy novel about Bilbo Baggins and his adventure to reclaim the Lonely Mountain.",
+        publisher: "Houghton Mifflin Harcourt",
+        publishedDate: Date(),
+        categories: ["Fantasy", "Adventure"],
+        placement: .reading,
+        lastChange: Date()
+    ),
+                           Book(
+                            title: "The Hobbit",
+                            author: ["J.R.R. Tolkien"],
+                            pages: 310,
+                            coverImageURL: URL(string: "https://books.google.com/books/content?id=CixXEAAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"),
+                            isbn: "9780547928227",
+                            description: "A classic fantasy novel about Bilbo Baggins and his adventure to reclaim the Lonely Mountain.",
+                            publisher: "Houghton Mifflin Harcourt",
+                            publishedDate: Date(),
+                            categories: ["Fantasy", "Adventure"],
+                            placement: .reading,
+                            lastChange: Date()
+                           )]
+    
     let placement: BookPlacement = .reading
     BookScrollView(bookPlacement: placement)
 }
